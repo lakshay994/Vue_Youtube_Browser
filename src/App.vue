@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <SearchBar @searchInputChanged="searchInputChanged"></SearchBar>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import axios from 'axios';
+    import SearchBar from './components/SearchBar';
+    const API_KEY = 'AIzaSyBvGkNP_EehunNwkRS6r0chhyOhb2YnWpo';
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+    export default{
+        name: 'App',
+        components: {
+            SearchBar
+        },
+        methods: {
+            searchInputChanged(searchTerm) {
+                axios.get('https://www.googleapis.com/youtube/v3/search', {
+                    params: {
+                        key: API_KEY,
+                        type: 'video',
+                        part: 'snippet',
+                        q: searchTerm
+                    }
+                }).then((res) => console.log(res)).catch((err) => console.log('Could no t find results'));
+            }
+        }
+    };
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
