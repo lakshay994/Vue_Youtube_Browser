@@ -1,18 +1,26 @@
 <template>
-    <div>
+    <div class="container">
         <SearchBar @searchInputChanged="searchInputChanged"></SearchBar>
+        <VideoList @videoSelect="onVideoSelect" :videos="videos"></VideoList>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
     import SearchBar from './components/SearchBar';
+    import VideoList from './components/VideoList';
     const API_KEY = 'AIzaSyBvGkNP_EehunNwkRS6r0chhyOhb2YnWpo';
 
     export default{
         name: 'App',
+        data(){
+            return{
+                videos: []
+            }
+        },
         components: {
-            SearchBar
+            SearchBar,
+            VideoList
         },
         methods: {
             searchInputChanged(searchTerm) {
@@ -23,7 +31,10 @@
                         part: 'snippet',
                         q: searchTerm
                     }
-                }).then((res) => console.log(res)).catch((err) => console.log('Could no t find results'));
+                }).then((res) => this.videos = res.data.items);
+            },
+            onVideoSelect(video){
+                console.log(video)
             }
         }
     };
